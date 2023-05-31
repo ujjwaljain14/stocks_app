@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:stocks_app/screens/phone_verify.dart';
 import 'package:stocks_app/widgets/signin_signup.dart';
 
 class SignUpScreen extends StatefulWidget{
-  const SignUpScreen({super.key});
-
+  const SignUpScreen({super.key,});
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
@@ -16,10 +18,77 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _emailTextController = TextEditingController();
   final TextEditingController _passwordTextController = TextEditingController();
 
+  bool _isVerified = false;
+
   @override
   Widget build(BuildContext context) {
 
+    Widget pno = TextField(
+      onChanged: (text){
+        if(_isVerified){
+          setState(() {
+            _isVerified = false;
+          });
+        }
+      },
+
+      controller: _phoneNumberTextController,
+      maxLength: 10,
+      cursorColor: Colors.white,
+      style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 20),
+      decoration: InputDecoration(
+          prefixIcon: const Icon(Icons.phone , color: Colors.white,),
+          prefixText: '+91 ' ,
+          suffix: (_isVerified) ?
+          const Icon(Icons.verified, color: Colors.green,) :
+          TextButton(onPressed: ()async{
+            _isVerified = await Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) =>
+                  PhoneVerifyScreen(phoneNumber: _phoneNumberTextController.text)
+              ),
+            );
+            if(_isVerified){
+              setState(() {
+                _isVerified;
+              });
+            }
+          },
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.only(right: 10),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              minimumSize: const Size.square(2),) ,
+            child: const Text('Verify', style: TextStyle(color:Colors.white),),
+          ),
+          prefixStyle: const TextStyle(
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+          labelText: 'Phone Number',
+          labelStyle: TextStyle(
+              color: Colors.white60.withOpacity(0.9), fontSize: 18),
+          filled: true,
+          fillColor: Colors.white.withOpacity(0.2),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(30),
+              borderSide: const BorderSide(width: 0, style: BorderStyle.none))
+      ),
+      keyboardType:TextInputType.number,
+    );
+
+
+
+
+
+
+
+
+
+
+
+
+
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Sign Up', style: TextStyle(fontSize: 24)),
+        backgroundColor: Colors.black87,
+      ),
       body: Container(
         height: double.infinity,
         decoration: const  BoxDecoration(
@@ -32,18 +101,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              const SizedBox(height:160),
-              textFieldWidget('First Name', Icons.person, false, false,_firstNameTextController),
+              const SizedBox(height:90),
+              textFieldWidget(context, 'First Name', Icons.person, false, false,_firstNameTextController),
               const SizedBox(height:20),
-              textFieldWidget('Last Name', Icons.person, false, false, _lastNameTextController),
+              textFieldWidget(context, 'Last Name', Icons.person, false, false, _lastNameTextController),
               const SizedBox(height:20),
-              textFieldWidget('Phone Number', Icons.person, false, true, _phoneNumberTextController),
+              pno,
               const SizedBox(height:20),
-              textFieldWidget('Email Id', Icons.person, false, false, _emailTextController),
+              textFieldWidget(context, 'Email Id', Icons.email, false, false, _emailTextController),
               const SizedBox(height:20),
-              textFieldWidget('Password', Icons.person, true, false, _passwordTextController),
-              const SizedBox(height:60),
-              signInSignUpButton(false, ()=>Navigator.of(context).pop()),
+              textFieldWidget(context, 'Password', Icons.lock, true, false, _passwordTextController),
+              const SizedBox(height:50),
+              signInSignUpButton('SIGN UP', () {
+                // FirebaseAuth.instance.verifyPhoneNumber(verificationCompleted: verificationCompleted, verificationFailed: verificationFailed, codeSent: codeSent, codeAutoRetrievalTimeout: codeAutoRetrievalTimeout)
+                Navigator.of(context).pop();
+              }),
             ],
           ),
         ),

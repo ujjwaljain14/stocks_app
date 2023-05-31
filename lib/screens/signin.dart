@@ -48,9 +48,9 @@ class _SignInScreenState extends State<SignInScreen> {
                 child: signInImageWidget('./assets/images/signin_screen_image.png'),
               ),
               const SizedBox(height: 90,),
-              SizedBox(width: 350, child: textFieldWidget("Phone Number", Icons.verified_user, false, true,_phoneNumTextController)),
+              SizedBox(width: 350, child: textFieldWidget(context, "Phone Number", Icons.verified_user, false, true,_phoneNumTextController)),
               const SizedBox(height: 20,),
-              SizedBox(width: 350, child: textFieldWidget("Password", Icons.lock, true, false ,_passwordTextController)),
+              SizedBox(width: 350, child: textFieldWidget(context, "Password", Icons.lock, true, false ,_passwordTextController)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -59,13 +59,15 @@ class _SignInScreenState extends State<SignInScreen> {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => const SignUpScreen()
                     ));
+                    _passwordTextController.clear();
+                    _phoneNumTextController.clear();
                   }, child: const Text("Don't have an account?", style: TextStyle(color: Colors.white60))),
                 ],
               ),
               const SizedBox(height: 30),
               SizedBox(
                   width:300,
-                  child: signInSignUpButton(true, (){
+                  child: signInSignUpButton('LOG IN', (){
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => const HomeScreen()));
                             _passwordTextController.clear();
