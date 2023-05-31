@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "556351695733",
+    "project_id": "stocks-app-562ea",
+    "storage_bucket": "stocks-app-562ea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:556351695733:android:4bc81ef53b2bb81cf4413c",
+        "android_client_info": {
+          "package_name": "com.example.stocks_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJ37ZiKozRUsfi2PpTUNuHtz3JPmM4x30"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

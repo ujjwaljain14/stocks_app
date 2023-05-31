@@ -33,7 +33,9 @@ class _SignInScreenState extends State<SignInScreen> {
       body: Container(
             height: double.infinity,
             decoration: const  BoxDecoration(
-              gradient: LinearGradient(colors: [ Color(0xff000000), Color(0xff130f40),],
+              gradient: LinearGradient(colors:
+              [ Colors.black, Colors.black87,],
+              // [ Color(0xff000000), Color(0xff130F40),],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
@@ -43,7 +45,7 @@ class _SignInScreenState extends State<SignInScreen> {
             children: <Widget> [
               Padding(
                 padding: const EdgeInsets.only(top: 40),
-                child: signInImageWidget('./assets/images/signin_screen_image.jpg'),
+                child: signInImageWidget('./assets/images/signin_screen_image.png'),
               ),
               const SizedBox(height: 90,),
               SizedBox(width: 350, child: textFieldWidget("Phone Number", Icons.verified_user, false, true,_phoneNumTextController)),

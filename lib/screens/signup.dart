@@ -23,7 +23,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       body: Container(
         height: double.infinity,
         decoration: const  BoxDecoration(
-          gradient: LinearGradient(colors: [ Color(0xff000000), Color(0xff130f40),],
+          gradient: LinearGradient(colors: [ Colors.black, Colors.black87,],
+            // [ Color(0xff000000), Color(0xff130F40),],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
