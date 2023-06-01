@@ -68,10 +68,13 @@ class _SignInScreenState extends State<SignInScreen> {
               SizedBox(
                   width:300,
                   child: signInSignUpButton('LOG IN', (){
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const HomeScreen()));
-                            _passwordTextController.clear();
-                            _phoneNumTextController.clear();
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) => const HomeScreen()
+                        ),
+                            (Route<dynamic> route) => false);
+                    _passwordTextController.clear();
+                    _phoneNumTextController.clear();
                           })
               ),
 

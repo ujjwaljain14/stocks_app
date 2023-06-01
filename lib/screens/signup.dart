@@ -42,11 +42,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
           suffix: (_isVerified) ?
           const Icon(Icons.verified, color: Colors.green,) :
           TextButton(onPressed: ()async{
-            _isVerified = await Navigator.of(context).push(
+          if(_phoneNumberTextController.text.length == 10){
+              _isVerified = await Navigator.of(context).push(
               MaterialPageRoute(builder: (context) =>
-                  PhoneVerifyScreen(phoneNumber: _phoneNumberTextController.text)
+              PhoneVerifyScreen(phoneNumber: _phoneNumberTextController.text)
               ),
-            );
+              );
+          }else{
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Enter a valid phone number')));
+          }
             if(_isVerified){
               setState(() {
                 _isVerified;
@@ -73,17 +78,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
 
 
-
-
-
-
-
-
-
-
-
-
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sign Up', style: TextStyle(fontSize: 24)),
@@ -101,21 +95,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              const SizedBox(height:90),
-              textFieldWidget(context, 'First Name', Icons.person, false, false,_firstNameTextController),
+              const SizedBox(height:90, width: double.infinity,),
+              SizedBox(width:350, child: textFieldWidget(context, 'First Name', Icons.person, false, false,_firstNameTextController)),
               const SizedBox(height:20),
-              textFieldWidget(context, 'Last Name', Icons.person, false, false, _lastNameTextController),
+              SizedBox(width:350, child: textFieldWidget(context, 'Last Name', Icons.person, false, false, _lastNameTextController)),
               const SizedBox(height:20),
-              pno,
+              SizedBox(width:350, child: pno),
               const SizedBox(height:20),
-              textFieldWidget(context, 'Email Id', Icons.email, false, false, _emailTextController),
+              SizedBox(width:350, child: textFieldWidget(context, 'Email Id', Icons.email, false, false, _emailTextController)),
               const SizedBox(height:20),
-              textFieldWidget(context, 'Password', Icons.lock, true, false, _passwordTextController),
+              SizedBox(width:350, child: textFieldWidget(context, 'Password', Icons.lock, true, false, _passwordTextController)),
               const SizedBox(height:50),
-              signInSignUpButton('SIGN UP', () {
-                // FirebaseAuth.instance.verifyPhoneNumber(verificationCompleted: verificationCompleted, verificationFailed: verificationFailed, codeSent: codeSent, codeAutoRetrievalTimeout: codeAutoRetrievalTimeout)
-                Navigator.of(context).pop();
-              }),
+              SizedBox(
+                width: 300,
+                child: signInSignUpButton('SIGN UP', () {
+                  String text="";
+                  if(_firstNameTextController.text == ''){
+                    text = "First Name can't be empty";
+                  }else if(_lastNameTextController.text == ''){
+                    text = "Last Name can't be empty";
+                  }else if(_isVerified == false){
+                    text = "Phone number must be verified";
+                  }else if(_emailTextController.text == ''){
+                    text = "Email can't be empty";
+                  }else if(_passwordTextController.text.length < 8){
+                    text = "Password must contain 8 characters";
+                  }else{
+                    Navigator.of(context).pop();
+                  }
+                  if(text.isNotEmpty){
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
+                  }
+                }),
+              ),
             ],
           ),
         ),
