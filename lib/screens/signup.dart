@@ -1,5 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:stocks_app/screens/phone_verify.dart';
 import 'package:stocks_app/widgets/signin_signup.dart';
@@ -121,6 +120,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   }else if(_passwordTextController.text.length < 8){
                     text = "Password must contain 8 characters";
                   }else{
+                    FirebaseFirestore.instance.collection('UserData').
+                      doc(_phoneNumberTextController.text).set({
+                        "firstName":_firstNameTextController.text,
+                        "lastName":_lastNameTextController.text,
+                        "email":_emailTextController.text,
+                        "password":_passwordTextController.text,
+                    });
                     Navigator.of(context).pop();
                   }
                   if(text.isNotEmpty){

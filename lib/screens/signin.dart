@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:stocks_app/screens/home.dart';
 import 'package:stocks_app/widgets/signin_signup.dart';
@@ -29,6 +30,9 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    var isFetching = false;
+
     return Scaffold(
       body: Container(
             height: double.infinity,
@@ -67,15 +71,24 @@ class _SignInScreenState extends State<SignInScreen> {
               const SizedBox(height: 30),
               SizedBox(
                   width:300,
-                  child: signInSignUpButton('LOG IN', (){
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                            builder: (context) => const HomeScreen()
-                        ),
-                            (Route<dynamic> route) => false);
-                    _passwordTextController.clear();
-                    _phoneNumTextController.clear();
-                          })
+                  child: signInSignUpButton('LOG IN', ()async{
+                    var db = await FirebaseFirestore.instance.collection('UserData').
+                    doc(_phoneNumTextController.text).get();
+                    if(!db.exists == true){
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Invalid Phone Number')));
+                    }
+                    else if( db['password']==_passwordTextController.text) {
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (context) => const HomeScreen()
+                          ),
+                              (Route<dynamic> route) => false);
+                      _passwordTextController.clear();
+                      _phoneNumTextController.clear();
+                    }else{
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Incorrect Password')));
+                    }
+                  },isProcessing: isFetching)
               ),
 
 

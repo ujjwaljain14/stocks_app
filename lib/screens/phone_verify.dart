@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
-import 'package:stocks_app/screens/signup.dart';
 import 'package:stocks_app/widgets/signin_signup.dart';
 
 class PhoneVerifyScreen extends StatefulWidget{
@@ -26,8 +25,8 @@ class _PhoneVerifyScreenState extends State<PhoneVerifyScreen> {
     otpSendingMethod();
   }
 
-  otpSendingMethod()async{
-    await auth.verifyPhoneNumber(
+  otpSendingMethod(){
+    auth.verifyPhoneNumber(
       phoneNumber: '+91 ${widget.phoneNumber}',
       verificationCompleted: (PhoneAuthCredential credential) async{
         await auth.signInWithCredential(credential);

@@ -12,7 +12,6 @@ TextField textFieldWidget(context, String text, IconData icon, bool isPasswordTy
     decoration: InputDecoration(
         prefixIcon: Icon(icon, color: Colors.white,),
         prefixText: isPhoneNum ? '+91 ' : '',
-        // suffix: Text('hello'),
         suffix: (isVerified) ?
           const Icon(Icons.verified, color: Colors.green,) :
           (isSignUp) ?
@@ -46,13 +45,17 @@ TextField textFieldWidget(context, String text, IconData icon, bool isPasswordTy
   );
 }
 
-  Container signInSignUpButton(String label, VoidCallback onTap){
+  Container signInSignUpButton(String label, VoidCallback onTap,{bool isProcessing = false}){
     return Container(
       height:50,
       width: 350,
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(90)),
       child: ElevatedButton(
-        onPressed: onTap,
+        onPressed: () {
+          // isProcessing = true;
+          onTap();
+          // isProcessing = false;
+        },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.resolveWith((states){
             if(states.contains(MaterialState.pressed)){
@@ -65,15 +68,18 @@ TextField textFieldWidget(context, String text, IconData icon, bool isPasswordTy
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))
           ),
         ),
-        child: Text(
-          label,
-          // isLogin ? 'LOG IN' : 'SIGN UP',
-          style: const TextStyle(
-            color: Colors.black87,
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-        ),
+        child:
+          isProcessing?
+            const CircularProgressIndicator(color: Colors.black,)
+              :
+              Text(
+                label,
+                style: const TextStyle(
+                  color: Colors.black87,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
       ),
     );
   }
