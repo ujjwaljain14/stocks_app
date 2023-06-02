@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:stocks_app/screens/home.dart';
+import 'package:stocks_app/widgets/blink_loading.dart';
 import 'package:stocks_app/widgets/signin_signup.dart';
 import 'package:stocks_app/screens/signup.dart';
 
@@ -30,8 +31,6 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-    var isFetching = false;
 
     return Scaffold(
       body: Container(
@@ -72,9 +71,21 @@ class _SignInScreenState extends State<SignInScreen> {
               SizedBox(
                   width:300,
                   child: signInSignUpButton('LOG IN', ()async{
+                    (_passwordTextController.text=="" || _phoneNumTextController.text == "")
+                    ?
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Text Fields can't be empty")))
+                    :
+                    Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>BlinkLoading()));
                     var db = await FirebaseFirestore.instance.collection('UserData').
                     doc(_phoneNumTextController.text).get();
                     if(!db.exists == true){
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (context) => const SignInScreen()
+                          ),
+                              (Route<dynamic> route) => false);
+                      _passwordTextController.clear();
+                      _phoneNumTextController.clear();
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Invalid Phone Number')));
                     }
                     else if( db['password']==_passwordTextController.text) {
@@ -86,9 +97,16 @@ class _SignInScreenState extends State<SignInScreen> {
                       _passwordTextController.clear();
                       _phoneNumTextController.clear();
                     }else{
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (context) => const SignInScreen()
+                          ),
+                              (Route<dynamic> route) => false);
+                      _passwordTextController.clear();
+                      _phoneNumTextController.clear();
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Incorrect Password')));
                     }
-                  },isProcessing: isFetching)
+                  })
               ),
 
 

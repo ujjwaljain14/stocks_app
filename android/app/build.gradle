@@ -26,6 +26,14 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
+//def keystoreProperties = new Properties()
+//def keystorePropertiesFile = rootProject.file('key.properties')
+//if (keystorePropertiesFile.exists()) {
+//    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+//}
+//
+//
+
 android {
     compileSdkVersion localProperties.getProperty('flutter.compileSdkVersion').toInteger()
     ndkVersion flutter.ndkVersion
@@ -61,6 +69,21 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+//
+//    signingConfigs {
+//        release {
+//            keyAlias keystoreProperties['keyAlias']
+//            keyPassword keystoreProperties['keyPassword']
+//            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+//            storePassword keystoreProperties['storePassword']
+//        }
+//    }
+//    buildTypes {
+//        release {
+//            signingConfig signingConfigs.release
+//        }
+//    }
+
 }
 
 flutter {
@@ -70,6 +93,7 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation platform('com.google.firebase:firebase-bom:32.1.0')
+//    implementation 'com.google.firebase:firebase-appcheck:17.0.1'
     implementation 'com.google.firebase:firebase-firestore'
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-auth'
