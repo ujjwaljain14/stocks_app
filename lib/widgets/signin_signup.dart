@@ -29,7 +29,8 @@ TextField textFieldWidget(context, String text, IconData icon, bool isPasswordTy
                 padding: const EdgeInsets.only(right: 10),
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 minimumSize: const Size.square(2),) ,
-              child: const Text('Verify', style: TextStyle(color:Colors.white),),) :
+              child: const Text('Verify', style: TextStyle(color:Colors.white),),)
+              :
           const Text(''),
         prefixStyle: const TextStyle(
             color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
@@ -37,7 +38,7 @@ TextField textFieldWidget(context, String text, IconData icon, bool isPasswordTy
         labelStyle: TextStyle(
             color: Colors.white60.withOpacity(0.9), fontSize: 18),
         filled: true,
-        fillColor: Colors.white.withOpacity(0.2),
+        fillColor: Colors.white.withOpacity(0.1),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(30),
             borderSide: const BorderSide(width: 0, style: BorderStyle.none))
     ),

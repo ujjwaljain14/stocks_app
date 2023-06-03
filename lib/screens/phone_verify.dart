@@ -54,13 +54,14 @@ class _PhoneVerifyScreenState extends State<PhoneVerifyScreen> {
         ),
         body: Container(
           height: double.infinity,
-          decoration: const  BoxDecoration(
-          gradient: LinearGradient(colors: [ Colors.black, Colors.black87,],
-          // [ Color(0xff000000), Color(0xff130F40),],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          ),
-          ),
+          color: Colors.black,
+          // decoration: const  BoxDecoration(
+          // gradient: LinearGradient(colors: [ Colors.black, Colors.black87,],
+          // // [ Color(0xff000000), Color(0xff130F40),],
+          // begin: Alignment.topCenter,
+          // end: Alignment.bottomCenter,
+          // ),
+          // ),
           child: Column(
 
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

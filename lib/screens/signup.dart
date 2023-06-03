@@ -69,7 +69,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           labelStyle: TextStyle(
               color: Colors.white60.withOpacity(0.9), fontSize: 18),
           filled: true,
-          fillColor: Colors.white.withOpacity(0.2),
+          fillColor: Colors.white.withOpacity(0.1),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(30),
               borderSide: const BorderSide(width: 0, style: BorderStyle.none))
       ),
@@ -84,13 +84,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
       body: Container(
         height: double.infinity,
-        decoration: const  BoxDecoration(
-          gradient: LinearGradient(colors: [ Colors.black, Colors.black87,],
-            // [ Color(0xff000000), Color(0xff130F40),],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
+        color: Colors.black,
+        // decoration: const  BoxDecoration(
+        //   gradient: LinearGradient(colors: [ Colors.black, Colors.black87,],
+        //     // [ Color(0xff000000), Color(0xff130F40),],
+        //     begin: Alignment.topCenter,
+        //     end: Alignment.bottomCenter,
+        //   ),
+        // ),
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
