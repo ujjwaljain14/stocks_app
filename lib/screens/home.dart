@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stocks_app/screens/signin.dart';
-import 'package:stocks_app/widgets/newsGet.dart';
+import '../widgets/news_list_item.dart';
 
 
 class HomeScreen extends StatefulWidget{
@@ -13,35 +13,18 @@ class HomeScreen extends StatefulWidget{
 
 class _HomeScreenState extends State<HomeScreen> {
   var showSheet = true;
+
+  final TextEditingController _searchTextController = TextEditingController();
+
+  var stocks = ['NSE', 'TCS', 'RELIANCE', 'Adani ports','sail'];
+
+  final month = {
+    1:'Jan', 2:'Feb', 3:'Mar', 4:'Apr', 5:'May', 6:'June', 7:'July', 8:'Aug',
+    9:'Sept', 10:'Oct', 11:'Nov', 12:'Dec',
+  };
+
   @override
   Widget build(BuildContext context) {
-
-    TextEditingController _searchTextController = TextEditingController();
-
-
-    var month = {
-      1:'Jan', 2:'Feb', 3:'Mar', 4:'Apr', 5:'May', 6:'June', 7:'July', 8:'Aug',
-      9:'Sept', 10:'Oct', 11:'Nov', 12:'Dec',
-    };
-
-    var stocks = ['TCS', 'RELIANCE', 'Adani ports'];
-
-    Widget _newsListItem(String stockName){
-      return ListTile(
-        title: FutureBuilder(
-            future: getResponseData(stockName),
-            builder: (context, AsyncSnapshot snapshot){
-              if(snapshot.hasData){
-                return getStockNews(context, snapshot.data);
-              }else{
-                return const Text('');
-              }
-            },
-        ),
-
-      );
-    }
-
 
     return Scaffold(
       body: Stack(
@@ -101,6 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   onSubmitted: (event)=>setState(() {
                                     showSheet = true;
                                   }),
+                                  style: const TextStyle(color: Colors.white),
                                   maxLines: 1,
                                   controller: _searchTextController,
                                   cursorColor: Colors.white,
@@ -145,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
               minChildSize: 0.12,
               // expand: true,
               snap: true,
-              snapSizes: const [0.4, 0.85],
+              snapSizes: const [0.35, 0.85],
               snapAnimationDuration: const Duration(milliseconds: 200),
               builder: (context, controller)=>ClipRRect(
                 borderRadius: const BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
@@ -175,11 +159,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                           ),
                         ),
-                        // SliverFixedExtentList(
-                        //   itemExtent: 2.0,
                           SliverAnimatedList(
                             initialItemCount: stocks.length,
-                            itemBuilder: (context, index, animation) => _newsListItem(stocks[index]),
+                            itemBuilder: (context, index, animation) => newsListItem(stocks[index]),
                         ),
                       ],
                     ),
