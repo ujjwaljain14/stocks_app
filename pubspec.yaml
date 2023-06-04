@@ -39,6 +39,8 @@ dependencies:
   firebase_auth: ^4.6.2
   flutter_otp_text_field: ^1.1.0+2
   cloud_firestore: ^4.8.0
+  http: ^0.13.6
+  url_launcher: ^6.1.11
 
 dev_dependencies:
   flutter_test:

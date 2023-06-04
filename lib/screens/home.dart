@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stocks_app/screens/signin.dart';
+import 'package:stocks_app/widgets/newsGet.dart';
 
 
 class HomeScreen extends StatefulWidget{
@@ -23,11 +24,21 @@ class _HomeScreenState extends State<HomeScreen> {
       9:'Sept', 10:'Oct', 11:'Nov', 12:'Dec',
     };
 
-    var stocks = ['TCS', 'ITC', 'SAIL', 'ADANIPORTS'];
+    var stocks = ['TCS', 'RELIANCE', 'Adani ports'];
 
     Widget _newsListItem(String stockName){
       return ListTile(
-        title: Text('Hola News of $stockName', style: const TextStyle(color: Colors.white),),
+        title: FutureBuilder(
+            future: getResponseData(stockName),
+            builder: (context, AsyncSnapshot snapshot){
+              if(snapshot.hasData){
+                return getStockNews(context, snapshot.data);
+              }else{
+                return const Text('');
+              }
+            },
+        ),
+
       );
     }
 
@@ -185,3 +196,4 @@ class _HomeScreenState extends State<HomeScreen> {
 
   }
 }
+
