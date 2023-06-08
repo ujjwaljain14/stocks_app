@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stocks_app/screens/phone_verify.dart';
+import 'package:sizer/sizer.dart';
 
 TextField textFieldWidget(context, String text, IconData icon, bool isPasswordType, bool isPhoneNum, TextEditingController controller,{bool isVerified=false, bool isSignUp = false}) {
   return TextField(controller: controller,
@@ -8,7 +9,7 @@ TextField textFieldWidget(context, String text, IconData icon, bool isPasswordTy
     enableSuggestions: !isPasswordType,
     autocorrect: !isPasswordType,
     cursorColor: Colors.white,
-    style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 20),
+    style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 15.sp),
     decoration: InputDecoration(
         prefixIcon: Icon(icon, color: Colors.white,),
         prefixText: isPhoneNum ? '+91 ' : '',
@@ -26,20 +27,20 @@ TextField textFieldWidget(context, String text, IconData icon, bool isPasswordTy
               }
             },
               style: TextButton.styleFrom(
-                padding: const EdgeInsets.only(right: 10),
+                padding: EdgeInsets.only(right: 10.h),
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                minimumSize: const Size.square(2),) ,
+                minimumSize: Size.square(0.2.h),) ,
               child: const Text('Verify', style: TextStyle(color:Colors.white),),)
               :
           const Text(''),
-        prefixStyle: const TextStyle(
-            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+        prefixStyle: TextStyle(
+            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15.sp),
         labelText: text,
         labelStyle: TextStyle(
-            color: Colors.white60.withOpacity(0.9), fontSize: 18),
+            color: Colors.white60.withOpacity(0.9), fontSize: 13.5.sp),
         filled: true,
         fillColor: Colors.white.withOpacity(0.1),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(30),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(3.38.h),
             borderSide: const BorderSide(width: 0, style: BorderStyle.none))
     ),
     keyboardType: !isPhoneNum ? TextInputType.text : TextInputType.number,
@@ -48,9 +49,9 @@ TextField textFieldWidget(context, String text, IconData icon, bool isPasswordTy
 
   Container signInSignUpButton(String label, VoidCallback onTap,{bool isProcessing = false}){
     return Container(
-      height:50,
-      width: 350,
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(90)),
+      height:5.6.h,
+      width: 85.16.w,
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.1.h)),
       child: ElevatedButton(
         onPressed: () {
           // isProcessing = true;
@@ -66,7 +67,7 @@ TextField textFieldWidget(context, String text, IconData icon, bool isPasswordTy
             }
           }),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(3.37.h))
           ),
         ),
         child:
@@ -75,10 +76,10 @@ TextField textFieldWidget(context, String text, IconData icon, bool isPasswordTy
               :
               Text(
                 label,
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.black87,
                   fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                  fontSize: 12.sp,
                 ),
               ),
       ),

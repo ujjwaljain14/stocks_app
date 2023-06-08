@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 
 // loaderOn(BuildContext context) {
@@ -42,17 +43,12 @@ class _BlinkLoadingState extends State<BlinkLoading> with SingleTickerProviderSt
   Widget build(BuildContext context) {
     return Scaffold(
         body:Container(
-          height: double.infinity,
+          height: double.infinity.h,
           alignment: Alignment.center,
-          decoration: const  BoxDecoration(
-            gradient: LinearGradient(colors: [ Colors.black, Colors.black87,],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-          ),
+          color: Colors.black,
           child: FadeTransition(
             opacity: _animationController,
-            child: Icon(Icons.currency_rupee_sharp, color: Colors.green.shade800,size: 50,)
+            child: Icon(Icons.currency_rupee_sharp, color: Colors.green.shade800,size: 6.h,)
       ),
         )
     );

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:stocks_app/widgets/signin_signup.dart';
+import 'package:sizer/sizer.dart';
 
 class PhoneVerifyScreen extends StatefulWidget{
 
@@ -49,11 +50,11 @@ class _PhoneVerifyScreenState extends State<PhoneVerifyScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Verify', style: TextStyle(fontSize: 24)),
+          title: Text('Verify', style: TextStyle(fontSize: 18.sp)),
           backgroundColor: Colors.black87,
         ),
         body: Container(
-          height: double.infinity,
+          height: double.infinity.h,
           color: Colors.black,
           // decoration: const  BoxDecoration(
           // gradient: LinearGradient(colors: [ Colors.black, Colors.black87,],
@@ -70,24 +71,24 @@ class _PhoneVerifyScreenState extends State<PhoneVerifyScreen> {
               Column(
                 children: [
                   Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.only(left: 12),
-                    child: const Text(
+                    width: double.infinity.w,
+                    padding: EdgeInsets.only(left: 0.22.h),
+                    child: Text(
                         'Verification Code',
                         textAlign: TextAlign.left,
-                        style: TextStyle(color: Colors.white, fontSize: 35, fontWeight: FontWeight.bold)
+                        style: TextStyle(color: Colors.white, fontSize: 26.25.sp, fontWeight: FontWeight.bold)
                     ),
                   ),
 
-                  const SizedBox(height: 15,),
+                  SizedBox(height: 1.68.h,),
 
                   Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.only(left: 30),
-                    child: const Text(
+                    width: double.infinity.w,
+                    padding: EdgeInsets.only(left: 3.37.h),
+                    child: Text(
                         'We texted you a code\nPlease enter it below',
                         textAlign: TextAlign.left,
-                        style: TextStyle(color: Colors.white, fontSize: 20,)
+                        style: TextStyle(color: Colors.white, fontSize: 15.sp,)
                     ),
                   ),
                 ],
@@ -115,19 +116,19 @@ class _PhoneVerifyScreenState extends State<PhoneVerifyScreen> {
 
               Column(
                 children: [
-                  const Text(
+                  Text(
                       'This helps us verify every user in our market place',
-                      style: TextStyle(color: Colors.white, fontSize: 15, )
+                      style: TextStyle(color: Colors.white, fontSize: 11.25.sp, )
                   ),
 
                   TextButton(
                     onPressed: (){},
-                    child: const Text(
+                    child: Text(
                         "Didn't get code?",
-                        style: TextStyle(color: Colors.white, fontSize: 15, )
+                        style: TextStyle(color: Colors.white, fontSize: 11.25.sp, )
                     ),
                   ),
-                  const SizedBox(height: 40,),
+                  SizedBox(height: 4.5.h,),
                   signInSignUpButton('Verify', ()async{
                     try {
                       PhoneAuthCredential credential =

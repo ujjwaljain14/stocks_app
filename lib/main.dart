@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 import 'package:stocks_app/screens/signin.dart';
 
 void main() async{
@@ -13,11 +14,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return const MaterialApp(
+    return Sizer(
+        builder: (context, orientation, deviceType)
+    {
+      return const MaterialApp(
         home: SignInScreen(),
-    ) ;
-
+      );
+    }
+    );
   }
 }
 
