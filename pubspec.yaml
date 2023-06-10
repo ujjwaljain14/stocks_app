@@ -43,6 +43,8 @@ dependencies:
   url_launcher: ^6.1.11
   csv: ^5.0.2
   sizer: ^2.0.15
+  yahoofin: ^0.0.8
+  html: ^0.15.4
 
 dev_dependencies:
   flutter_test:

@@ -35,7 +35,7 @@ class _BlinkLoadingState extends State<BlinkLoading> with SingleTickerProviderSt
   }
 
   _navigatewait()async{
-    await Future.delayed(const Duration(seconds: 5),(){});
+    await Future.delayed(const Duration(seconds: 6),(){});
     Navigator.of(context).pop();
   }
 

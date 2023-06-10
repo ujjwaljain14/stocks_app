@@ -95,42 +95,50 @@ class _SignInScreenState extends State<SignInScreen> {
                               :
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (ctx) => BlinkLoading()));
-                          var db = await FirebaseFirestore.instance.collection(
-                              'UserData').
-                          doc(_phoneNumTextController.text).get();
-                          if (!db.exists == true) {
-                            Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                    builder: (context) => const SignInScreen()
-                                ),
-                                    (Route<dynamic> route) => false);
-                            _passwordTextController.clear();
-                            _phoneNumTextController.clear();
+                          try {
+                            var db = await FirebaseFirestore.instance
+                                .collection(
+                                'UserData').
+                            doc(_phoneNumTextController.text).get().timeout(const Duration(seconds: 6));
+                            if (!db.exists == true) {
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) => const SignInScreen()
+                                  ),
+                                      (Route<dynamic> route) => false);
+                              _passwordTextController.clear();
+                              _phoneNumTextController.clear();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text('Invalid Phone Number')));
+                            }
+                            else
+                            if (db['password'] == _passwordTextController.text) {
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) => const HomeScreen()
+                                  ),
+                                      (Route<dynamic> route) => false);
+                              _passwordTextController.clear();
+                              _phoneNumTextController.clear();
+                            } else {
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) => const SignInScreen()
+                                  ),
+                                      (Route<dynamic> route) => false);
+                              _passwordTextController.clear();
+                              _phoneNumTextController.clear();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text('Incorrect Password')));
+                            }
+                          }catch(e){
                             ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                    content: Text('Invalid Phone Number')));
+                                    content: Text('Check your internet connection and try again')));
                           }
-                          else
-                          if (db['password'] == _passwordTextController.text) {
-                            Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                    builder: (context) => const HomeScreen()
-                                ),
-                                    (Route<dynamic> route) => false);
-                            _passwordTextController.clear();
-                            _phoneNumTextController.clear();
-                          } else {
-                            Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                    builder: (context) => const SignInScreen()
-                                ),
-                                    (Route<dynamic> route) => false);
-                            _passwordTextController.clear();
-                            _phoneNumTextController.clear();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Incorrect Password')));
-                          }
+
                         })
                     ),
 
