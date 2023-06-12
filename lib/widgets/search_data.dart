@@ -14,20 +14,20 @@ import 'package:flutter/services.dart';
     bse = const CsvToListConverter().convert(bseData);
   }
 
-  List<dynamic> search(String str){
+  List<dynamic> search(String str, List stocks){
     data.clear();
     nse.forEach((element) {
       if(element[0].toUpperCase().startsWith(str.toUpperCase()) && element[0]!='SYMBOL' && str!=''){
         var temp =[];
         temp.add(element[0]); //stock symbol
         temp.add(element[1]); //stock name
-        // final finalUrl = Uri.parse('https://www.nseindia.com/api/quote-equity?symbol=$str&section=trade_info');
-        // final response = await http.get(finalUrl);
-        // final resData = jsonDecode(response.body);
         temp.add('0'); // last traded price  resData["marketDeptOrderBook"]["bid"][0]["price"]
         temp.add('0'); // change in rupee
         temp.add('NSE');// stock exchange
-        temp.add(true);//stock to add or not
+        temp.add(true);
+        if(stocks.contains(element[0]+'.NS')) {
+          temp[5] = false;
+        }
         data.add(temp);
       }
     });
@@ -39,7 +39,11 @@ import 'package:flutter/services.dart';
         temp.add('0'); // last traded price
         temp.add('0'); // change in rupee
         temp.add('BSE');// stock exchange
-        temp.add(true);//stock to add or not
+        temp.add(true);
+        if(stocks.contains(element[2]+'.BO')) {
+          temp[5] = false;
+        }
+        // print('temp from nse');
         data.add(temp);
       }
     });

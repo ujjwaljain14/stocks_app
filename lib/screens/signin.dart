@@ -99,7 +99,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             var db = await FirebaseFirestore.instance
                                 .collection(
                                 'UserData').
-                            doc(_phoneNumTextController.text).get().timeout(const Duration(seconds: 6));
+                            doc(_phoneNumTextController.text).get().timeout(const Duration(seconds: 5));
                             if (!db.exists == true) {
                               Navigator.of(context).pushAndRemoveUntil(
                                   MaterialPageRoute(
@@ -134,6 +134,8 @@ class _SignInScreenState extends State<SignInScreen> {
                                       content: Text('Incorrect Password')));
                             }
                           }catch(e){
+                            print('-----------------------------------------------------');
+                            print(e);
                             ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                     content: Text('Check your internet connection and try again')));

@@ -8,6 +8,8 @@ import '../widgets/news_list_item.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
 
+import '../widgets/stock_item.dart';
+
 
 class HomeScreen extends StatefulWidget{
 
@@ -40,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
   var newsStocks = [];
   var stocks=[];
   var stockProcesData = {};
+  var tappedStockData = {};
   final month = {
     1:'Jan', 2:'Feb', 3:'Mar', 4:'Apr', 5:'May', 6:'June', 7:'July', 8:'Aug',
     9:'Sept', 10:'Oct', 11:'Nov', 12:'Dec',
@@ -53,7 +56,6 @@ class _HomeScreenState extends State<HomeScreen> {
       str = '$str&query=$element';
     });
     str = str.substring(1);
-    print(str);
     final response = await http.get(
       Uri.parse('http://10.0.2.2:5000/api?$str'),
     );
@@ -61,7 +63,22 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       stockProcesData = resData;
     });
-    print(stockProcesData);
+    return resData;
+  }
+
+  Future fetchTappedStockData(String stock)async{
+    print('here1');
+    final response = await http.get(
+      Uri.parse('http://10.0.2.2:5000/detail?quote=$stock'),
+    );
+    print(response.body);
+    final resData = jsonDecode(response.body);
+    print((resData).runtimeType);
+    setState(() {
+      tappedStockData = resData;
+      print(tappedStockData.runtimeType);
+    });
+    print('here4');
     return resData;
   }
 
@@ -134,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               _showSearchItems = true;
                             }),
                             onChanged: (value){
-                              x = search(_searchTextController.text);
+                              x = search(_searchTextController.text, stocks);
                               // x = await search(_searchTextController.text).whenComplete(() => search);
                               setState(() {
                                 stocksList = x;
@@ -182,166 +199,130 @@ class _HomeScreenState extends State<HomeScreen> {
                                       if (stockProcesData[stocks[index]].length == 0){
                                         return const ListTile();
                                       }else {
-                                        return Container(
-                                          padding: EdgeInsets.all(1.h),
-                                          width: double.infinity,
-                                          height: 10.h,
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-                                              Column(
-                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                        return Dismissible(
+                                          key:UniqueKey(),
+                                          background: Container(color: Colors.red),
+                                          onDismissed: (direction){
+                                            var value = stocks[index].substring(0,stocks[index].length-3);
+                                            stocks.remove(stocks[index]);
+                                            fetchStockData();
+                                            setState(() {
+                                              newsStocks.remove(value);
+                                              stocksList.clear();
+                                            });
+                                          },
+                                          child: InkWell(
+                                            onTap: (){
+                                              fetchTappedStockData(stocks[index]).whenComplete(() => stockItem(context, stocks[index], stockProcesData[stocks[index]]['name'], tappedStockData));
+                                              // stockItem(context, stocks[index], stockProcesData[stocks[index]]);
+                                            },
+                                            child: Container(
+                                              padding: EdgeInsets.symmetric(horizontal: 1.h,vertical: 0.5.h),
+                                              width: double.infinity,
+                                              height: 12.h,
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.start,
                                                 children: [
-                                                  SizedBox(
-                                                    width:25.h,
-                                                    child: Text(
-                                                          stocks[index], style: Theme
-                                                            .of(context)
-                                                            .textTheme
-                                                            .headlineSmall!
-                                                            .copyWith(color: Colors.white, fontWeight: FontWeight.bold),),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 25.h,
-                                                    child: Text(
-                                                          stockProcesData[stocks[index]]['name'],
-                                                          overflow: TextOverflow.ellipsis,
-                                                          maxLines: 1,
-                                                          style: Theme
-                                                              .of(context)
-                                                              .textTheme
-                                                              .titleLarge!
-                                                              .copyWith(
-                                                              color: Colors.grey),
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      Column(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          SizedBox(
+                                                            width:18.h,
+                                                            child: Text(
+                                                                  stocks[index], style: Theme
+                                                                    .of(context)
+                                                                    .textTheme
+                                                                    .headlineSmall!
+                                                                    .copyWith(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 2.2.h),),
+                                                          ),
+                                                          SizedBox(
+                                                            width: 18.h,
+                                                            child: Text(
+                                                                  stockProcesData[stocks[index]]['name'],
+                                                                  overflow: TextOverflow.ellipsis,
+                                                                  maxLines: 1,
+                                                                  style: Theme
+                                                                      .of(context)
+                                                                      .textTheme
+                                                                      .titleLarge!
+                                                                      .copyWith(
+                                                                      color: Colors.grey,
+                                                                      fontSize: 1.7.h,
+                                                                      height: 0.2.h,
+                                                                  ),
+                                                                ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(child: Text('Graph',style: TextStyle(fontSize: 16, color: Colors.white,),textAlign: TextAlign.center,)),
+                                                      Column(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                                          children: [
+                                                            Text(stockProcesData[stocks[index]]['price'],
+                                                              style: Theme
+                                                                  .of(context)
+                                                                  .textTheme
+                                                                  .titleLarge!
+                                                                  .copyWith(
+                                                                  color: Colors.white),
+                                                            ),
+                                                            SizedBox(
+                                                              width: 11.h,
+                                                              child: ElevatedButton(
+                                                                style: ElevatedButton.styleFrom(
+                                                                  padding: EdgeInsets.symmetric(horizontal: 2.h,vertical: 0.5.h),
+                                                                  backgroundColor: double.parse(stockProcesData[stocks[index]]['percent_change']) >= 0
+                                                                      ?
+                                                                  Colors.green.shade700
+                                                                      :
+                                                                  Colors.red.shade700,
+                                                                  shape: RoundedRectangleBorder(
+                                                                    borderRadius: BorderRadius.circular(0.9.h),
+                                                                  ),
+                                                                ),
+                                                                onPressed: (){
+                                                                  setState(() {
+                                                                    priceVolumeButton ++;
+                                                                  });
+                                                                  },
+                                                                child: Text(
+                                                                  (priceVolumeButton)%3 == 0
+                                                                      ?
+                                                                  stockProcesData[stocks[index]]['percent_change']+'%'
+                                                                      :
+                                                                  (priceVolumeButton)%3 == 1
+                                                                      ?
+                                                                  stockProcesData[stocks[index]]['volume']
+                                                                      :
+                                                                  stockProcesData[stocks[index]]['change'],
+                                                                  textAlign: TextAlign.end,
+                                                                  style: Theme
+                                                                      .of(context)
+                                                                      .textTheme
+                                                                      .titleMedium!
+                                                                      .copyWith(
+                                                                      color: Colors.white,
+                                                                      fontWeight: FontWeight.bold),),
+                                                              ),
+                                                            ),
+                                                          ],
                                                         ),
+                                                    ],
+                                                  ),
+                                                  Divider(
+                                                    color: Colors.white.withOpacity(0.6),thickness: 2,
                                                   ),
                                                 ],
                                               ),
-                                              const SizedBox(child: Text('Graph',style: TextStyle(fontSize: 16, color: Colors.white,),textAlign: TextAlign.center,)),
-                                              Column(
-                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(stockProcesData[stocks[index]]['price'],
-                                                      style: Theme
-                                                          .of(context)
-                                                          .textTheme
-                                                          .titleLarge!
-                                                          .copyWith(
-                                                          color: Colors.white),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 11.h,
-                                                      child: ElevatedButton(
-                                                        style: ElevatedButton.styleFrom(
-                                                          padding: EdgeInsets.symmetric(horizontal: 2.h,vertical: 0.5.h),
-                                                          backgroundColor: double.parse(stockProcesData[stocks[index]]['percent_change']) >= 0
-                                                              ?
-                                                          Colors.green.shade700
-                                                              :
-                                                          Colors.red.shade700,
-                                                          shape: RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius.circular(0.9.h),
-                                                          ),
-                                                        ),
-                                                        onPressed: (){
-                                                          setState(() {
-                                                            priceVolumeButton ++;
-                                                          });
-                                                          },
-                                                        child: Text(
-                                                          (priceVolumeButton)%3 == 0
-                                                              ?
-                                                          stockProcesData[stocks[index]]['percent_change']+'%'
-                                                              :
-                                                          (priceVolumeButton)%3 == 1
-                                                              ?
-                                                          stockProcesData[stocks[index]]['volume']
-                                                              :
-                                                          stockProcesData[stocks[index]]['change'],
-                                                          textAlign: TextAlign.end,
-                                                          style: Theme
-                                                              .of(context)
-                                                              .textTheme
-                                                              .titleMedium!
-                                                              .copyWith(
-                                                              color: Colors.white,
-                                                              fontWeight: FontWeight.bold),),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                            ],
+                                            ),
                                           ),
                                         );
-                                        // return ListTile(
-                                        //   visualDensity: VisualDensity(vertical: 4),
-                                        //   // isThreeLine: true,
-                                        //   title: Text(
-                                        //     stocks[index], style: Theme
-                                        //       .of(context)
-                                        //       .textTheme
-                                        //       .headlineSmall!
-                                        //       .copyWith(color: Colors.white, fontWeight: FontWeight.bold),),
-                                        //   subtitle: Text(
-                                        //     stockProcesData[stocks[index]]['name'],
-                                        //     overflow: TextOverflow.ellipsis,
-                                        //     maxLines: 1,
-                                        //     style: Theme
-                                        //         .of(context)
-                                        //         .textTheme
-                                        //         .titleLarge!
-                                        //         .copyWith(
-                                        //         color: Colors.grey),
-                                        //   ),
-                                        //   trailing: SizedBox(
-                                        //     width: 50.w,
-                                        //     child: Row(
-                                        //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                        //       crossAxisAlignment: CrossAxisAlignment.center,
-                                        //       children: [
-                                        //         Text('Graph',style: TextStyle(fontSize: 16, color: Colors.white),),
-                                        //         Column(
-                                        //           children: [
-                                        //             Text(stockProcesData[stocks[index]]['price'],
-                                        //               style: Theme
-                                        //                   .of(context)
-                                        //                   .textTheme
-                                        //                   .titleLarge!
-                                        //                   .copyWith(
-                                        //                   color: Colors.white),
-                                        //             ),
-                                        //             ElevatedButton(
-                                        //                 style: ElevatedButton.styleFrom(
-                                        //                   padding: EdgeInsets.symmetric(horizontal: 2.h,vertical: 0.5.h),
-                                        //                   backgroundColor: double.parse(stockProcesData[stocks[index]]['percent_change']) >= 0
-                                        //                       ?
-                                        //                   Colors.green.shade700
-                                        //                       :
-                                        //                   Colors.red.shade700,
-                                        //                   shape: RoundedRectangleBorder(
-                                        //                     borderRadius: BorderRadius.circular(0.9.h),
-                                        //                   ),
-                                        //                     // fixedSize:Size(10.w, 4.h)
-                                        //                 ),
-                                        //                 onPressed: (){},
-                                        //                 child: Text( stockProcesData[stocks[index]]['volume'],
-                                        //                   textAlign: TextAlign.end,
-                                        //                   style: Theme
-                                        //                       .of(context)
-                                        //                       .textTheme
-                                        //                       .titleMedium!
-                                        //                       .copyWith(
-                                        //                       color: Colors.white),),
-                                        //               ),
-                                        //           ],
-                                        //         ),
-                                        //       ],
-                                        //     ),
-                                        //   ),
-                                        // );
                                       }
                                   }),
                           ),
@@ -398,7 +379,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     stocks.remove('${stocksList[index][0]}.BO');
                                                   }
                                                 });
-                                                print(stockProcesData);
                                               }, icon: Icon(Icons.check_circle),color: Colors.blue.shade500,iconSize: 2.5.h),
 
                                       trailing: Text(stocksList[index][4],style: const TextStyle(color: Colors.white)),
@@ -406,31 +386,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                 }),
                           ),
                         ),
-                        // Visibility(
-                        //   visible: !_showSearchItems,
-                        //   child: Center(
-                        //     child: TextButton(
-                        //       child: const Text('Log Out'),
-                        //       onPressed: ()=>Navigator.of(context).pushAndRemoveUntil(
-                        //           MaterialPageRoute(
-                        //               builder: (context) => const SignInScreen()
-                        //           ),
-                        //               (Route<dynamic> route) => false),
-                        //     ),
-                        //   ),
-                        // ),
                       ],
                     ),
                   ],
                 )
           ),
           Visibility(
-            visible: _showSheet,
+            visible: (_showSheet),
             child: DraggableScrollableSheet(
                 initialChildSize: 0.14,
                 maxChildSize: 0.85,
                 minChildSize: 0.14,
-                // expand: true,
                 snap: true,
                 snapSizes: const [0.35, 0.85],
                 snapAnimationDuration: const Duration(milliseconds: 200),
@@ -443,7 +409,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         controller: controller,
                         slivers:[
                           SliverAppBar(
-                            collapsedHeight: 9.h,
+                            collapsedHeight: 12.h,
                             backgroundColor: Colors.white10,
                             flexibleSpace:  FlexibleSpaceBar(
                                 title:  null,
@@ -471,9 +437,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               )
                            :
                             SliverAnimatedList(
+                              key: UniqueKey(),
                               initialItemCount: newsStocks.length,
-                              itemBuilder: (context, index, animation) =>
-                                  newsListItem(newsStocks[index]),
+                              itemBuilder: (context, index, animation) {
+                                return newsListItem(newsStocks[index]);
+                              }
                           ),
                         ],
                       ),
