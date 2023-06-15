@@ -46,6 +46,7 @@ dependencies:
   yahoofin: ^0.0.8
   html: ^0.15.4
   webview_flutter: ^4.2.2
+  fl_chart: ^0.62.0
 
 dev_dependencies:
   flutter_test:

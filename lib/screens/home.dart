@@ -67,25 +67,20 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future fetchTappedStockData(String stock)async{
-    print('here1');
     final response = await http.get(
       Uri.parse('http://10.0.2.2:5000/detail?quote=$stock'),
     );
-    print(response.body);
     final resData = jsonDecode(response.body);
-    print((resData).runtimeType);
     setState(() {
       tappedStockData = resData;
-      print(tappedStockData.runtimeType);
     });
-    print('here4');
     return resData;
   }
 
   @override
   Widget build(BuildContext context) {
     var x=[];
-
+    print(DateTime.now());
     return Scaffold(
       body: Stack(
         children: [
