@@ -82,7 +82,7 @@ stockItem(BuildContext context, String symbol, String name, Map stockData){
       builder: (context){
         return StatefulBuilder(builder: (context,state){
           return SingleChildScrollView(
-            padding: EdgeInsets.all(2.h),
+            padding: EdgeInsets.all(1.h),
             child: SizedBox(
               height: 83.5.h,
               child: Column(
@@ -117,7 +117,8 @@ stockItem(BuildContext context, String symbol, String name, Map stockData){
                           ),
                         ],
                       ),
-                      IconButton(onPressed: (){}, icon: const Icon(Icons.add_circle_outline,color: Colors.white,)),
+                      SizedBox(width: 4.w,),
+                      IconButton(onPressed: (){Navigator.of(context).pop();}, icon: const Icon(Icons.close_sharp,color: Colors.white,)),
                     ],
                   ),
                   Divider(
@@ -131,9 +132,9 @@ stockItem(BuildContext context, String symbol, String name, Map stockData){
                         children: [
                           Column(
                             children: [
-                              SizedBox(width:20.w, child: Text(stockData['price'],style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 2.3.h),)),
+                              SizedBox(width:30.w, child: Text(stockData['price'], textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 2.3.h),)),
                               SizedBox(height: 1.h,),
-                              SizedBox(width: 20.w, child: Text('${stockData['exchange']}  ${stockData['currency']}', style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.grey, fontWeight: FontWeight.bold,fontSize: 1.7.h),),)
+                              SizedBox(width: 30.w, child: Text('${stockData['exchange']}  ${stockData['currency']}', textAlign: TextAlign.center, style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Colors.grey, fontWeight: FontWeight.bold,fontSize: 1.7.h),),)
                             ],
                           ),
                           Column(
@@ -171,7 +172,7 @@ stockItem(BuildContext context, String symbol, String name, Map stockData){
                           children: [
                             Container(
                               decoration: BoxDecoration(
-                                  color: (duration == '1mo') ? Colors.grey : Colors.transparent,
+                                  color: (duration == '1mo') ? Colors.grey.withOpacity(0.4) : Colors.transparent,
                                   borderRadius: BorderRadius.circular(5),
                               ),
                               child: InkWell(
@@ -190,7 +191,7 @@ stockItem(BuildContext context, String symbol, String name, Map stockData){
                             SizedBox(width: 4.5.w,),
                             Container(
                               decoration: BoxDecoration(
-                                color: (duration == '3mo') ? Colors.grey : Colors.transparent,
+                                color: (duration == '3mo') ? Colors.grey.withOpacity(0.4) : Colors.transparent,
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               child: InkWell(
@@ -208,7 +209,7 @@ stockItem(BuildContext context, String symbol, String name, Map stockData){
                             SizedBox(width: 4.5.w,),
                             Container(
                               decoration: BoxDecoration(
-                                color: (duration == '6mo') ? Colors.grey : Colors.transparent,
+                                color: (duration == '6mo') ? Colors.grey.withOpacity(0.4) : Colors.transparent,
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               child: InkWell(
@@ -226,7 +227,7 @@ stockItem(BuildContext context, String symbol, String name, Map stockData){
                             SizedBox(width: 4.5.w,),
                             Container(
                               decoration: BoxDecoration(
-                                color: (duration == '1y') ? Colors.grey : Colors.transparent,
+                                color: (duration == '1y') ? Colors.grey.withOpacity(0.4) : Colors.transparent,
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               child: InkWell(
@@ -244,7 +245,7 @@ stockItem(BuildContext context, String symbol, String name, Map stockData){
                             SizedBox(width: 4.5.w,),
                             Container(
                               decoration: BoxDecoration(
-                                color: (duration == '2y') ? Colors.grey : Colors.transparent,
+                                color: (duration == '2y') ? Colors.grey.withOpacity(0.4) : Colors.transparent,
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               child: InkWell(
@@ -262,7 +263,7 @@ stockItem(BuildContext context, String symbol, String name, Map stockData){
                             SizedBox(width: 4.5.w,),
                             Container(
                               decoration: BoxDecoration(
-                                color: (duration == '5y') ? Colors.grey : Colors.transparent,
+                                color: (duration == '5y') ? Colors.grey.withOpacity(0.4) : Colors.transparent,
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               child: InkWell(
@@ -280,7 +281,7 @@ stockItem(BuildContext context, String symbol, String name, Map stockData){
                             SizedBox(width: 4.5.w,),
                             Container(
                               decoration: BoxDecoration(
-                                color: (duration == '10y') ? Colors.grey : Colors.transparent,
+                                color: (duration == '10y') ? Colors.grey.withOpacity(0.4) : Colors.transparent,
                                 borderRadius: BorderRadius.circular(5),
                               ),
                               child: InkWell(
@@ -310,7 +311,6 @@ stockItem(BuildContext context, String symbol, String name, Map stockData){
                               future: getHistoryData(symbol, duration),
                               builder: (context, snapshot){
                                 if(snapshot.hasData){
-                                  print(duration);
                                   return LineChartWidget(
                                     data: snapshot.data,
                                   );

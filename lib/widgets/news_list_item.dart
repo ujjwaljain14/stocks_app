@@ -5,7 +5,7 @@ import 'newsGet.dart';
 var newsData = {};
 
 Widget newsListItem(String stockName){
-  var response;
+  dynamic response;
   if(newsData.containsKey(stockName)){
     response = newsData[stockName];
   }else{

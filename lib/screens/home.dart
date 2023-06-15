@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:stocks_app/screens/signin.dart';
 import 'package:stocks_app/widgets/search_data.dart';
-import '../widgets/blink_loading.dart';
 import '../widgets/news_list_item.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
@@ -80,7 +79,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     var x=[];
-    print(DateTime.now());
     return Scaffold(
       body: Stack(
         children: [
@@ -106,38 +104,38 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: MediaQuery.of(context).padding.top,
                         ),
                         Container(
-                          height: MediaQuery.of(context).size.height*0.16 - MediaQuery.of(context).padding.top,
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.only(left: 1.12.h, right: 1.12.h, bottom: 0.56.h ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("Stocks",style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.bold),textAlign: TextAlign.left),
-                                  Text("${DateTime.now().day} ${month[DateTime.now().month]}",style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.grey, fontWeight: FontWeight.bold),textAlign: TextAlign.left),
-                                ],
-                              ),
-                              Stack(
-                                alignment: Alignment.center,
+                            height: MediaQuery.of(context).size.height*0.16 - MediaQuery.of(context).padding.top,
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.only(left: 1.12.h, right: 1.12.h, bottom: 0.56.h ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Icon(
-                                      Icons.circle_sharp,color: Colors.grey.shade900.withOpacity(0.8),size: 3.93.h,),
-                                    IconButton(
-                                      onPressed: (){
-                                        Navigator.of(context).pushAndRemoveUntil(
-                                            MaterialPageRoute(
-                                                builder: (context) => const SignInScreen()
-                                            ),
-                                                (Route<dynamic> route) => false);
-                                      },
-                                      icon: const Icon(Icons.more_horiz), color: Colors.blueAccent,iconSize: 3.37.h,),
-                                  ]
-                              )
-                            ],
+                                    Text("Stocks",style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.white, fontWeight: FontWeight.bold),textAlign: TextAlign.left),
+                                    Text("${DateTime.now().day} ${month[DateTime.now().month]}",style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.grey, fontWeight: FontWeight.bold),textAlign: TextAlign.left),
+                                  ],
+                                ),
+                                Stack(
+                                  alignment: Alignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.circle_sharp,color: Colors.grey.shade900.withOpacity(0.8),size: 3.93.h,),
+                                      IconButton(
+                                        onPressed: (){
+                                          Navigator.of(context).pushAndRemoveUntil(
+                                              MaterialPageRoute(
+                                                  builder: (context) => const SignInScreen()
+                                              ),
+                                                  (Route<dynamic> route) => false);
+                                        },
+                                        icon: const Icon(Icons.more_horiz), color: Colors.blueAccent,iconSize: 3.37.h,),
+                                    ]
+                                )
+                              ],
+                            ),
                           ),
-                        ),
                         Padding(
                           padding: EdgeInsets.symmetric(vertical: 1.12.h, horizontal: 1.12.h),
                           child: TextField(
@@ -236,7 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     .copyWith(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 2.2.h),),
                                                           ),
                                                           SizedBox(
-                                                            width: 18.h,
+                                                            width: 50.w,
                                                             child: Text(
                                                                   stockProcesData[stocks[index]]['name'],
                                                                   overflow: TextOverflow.ellipsis,
@@ -254,7 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           ),
                                                         ],
                                                       ),
-                                                      const SizedBox(child: Text('Graph',style: TextStyle(fontSize: 16, color: Colors.white,),textAlign: TextAlign.center,)),
+                                                      SizedBox(width:6.w),
                                                       Column(
                                                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -374,7 +372,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     stocks.remove('${stocksList[index][0]}.BO');
                                                   }
                                                 });
-                                              }, icon: Icon(Icons.check_circle),color: Colors.blue.shade500,iconSize: 2.5.h),
+                                              }, icon: const Icon(Icons.check_circle),color: Colors.blue.shade500,iconSize: 2.5.h),
 
                                       trailing: Text(stocksList[index][4],style: const TextStyle(color: Colors.white)),
                                   );

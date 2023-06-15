@@ -19,6 +19,8 @@ import 'package:sizer/sizer.dart';
 
 
 class BlinkLoading extends StatefulWidget{
+  const BlinkLoading({super.key});
+
   @override
   _BlinkLoadingState createState() => _BlinkLoadingState();
 }

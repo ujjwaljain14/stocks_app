@@ -5,24 +5,27 @@ import 'package:sizer/sizer.dart';
 class LineChartWidget extends StatelessWidget {
   final Map<String, dynamic> data;
 
-  LineChartWidget({required this.data});
+  const LineChartWidget({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
     double prevValue = 9223372036854775807.toDouble();
-    List interval_values=[9223372036854775807, 0];
+    List intervalValues=[9223372036854775807, 0];
     List<FlSpot> spots = data.entries.map((entry) {
-      if(entry.value < interval_values[0]) {
-          interval_values[0] = entry.value;
+      if(entry.value < intervalValues[0]) {
+          intervalValues[0] = entry.value;
       }
-      if(entry.value > interval_values[1]) {
-        interval_values[1] = entry.value;
+      if(entry.value > intervalValues[1]) {
+        intervalValues[1] = entry.value;
       }
       DateTime time = DateTime.parse(entry.key);
       double value = entry.value;
       return FlSpot(time.microsecondsSinceEpoch.toDouble(), value);
     }).toList();
-
+    var color = Colors.green;
+    if( double.parse(spots[0].props[1]!.toString()) - double.parse(spots[spots.length-1].props[1]!.toString()) > 0){
+      color = Colors.red;
+    }
     return Container(
       // Set the desired height
       padding: EdgeInsets.all(1.h),
@@ -51,17 +54,17 @@ class LineChartWidget extends StatelessWidget {
             LineChartBarData(
               spots: spots,
               isCurved: true,
-              color: Colors.green,
+              color: color,
               barWidth: 2,
               isStrokeCapRound: true,
 
               dotData: FlDotData(show: false),
               belowBarData: BarAreaData(
                 show: true,
-                color: Colors.green,
+                color: color,
                 gradient: LinearGradient(
                   colors: [
-                    Colors.green.shade900,
+                    color == Colors.green ? Colors.green.shade900 : Colors.red.shade900.withOpacity(0.8),
                     Colors.black,
                   ],
 
@@ -84,7 +87,7 @@ class LineChartWidget extends StatelessWidget {
                 reservedSize: 10.w,
                 interval: (data.length/6).round().toDouble(),
                 getTitlesWidget: (value, meta) {
-                if((prevValue - value).abs() >  ((interval_values[1] - interval_values[0])/6).round()){
+                if((prevValue - value).abs() >  ((intervalValues[1] - intervalValues[0])/6).round()){
                   prevValue = value;
                   return SizedBox(child: Text(value.round().toString(),overflow: TextOverflow.visible, style: const TextStyle(color: Colors.white,fontWeight: FontWeight.bold,),));
                 }

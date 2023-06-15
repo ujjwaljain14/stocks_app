@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart'as http;
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 
 launchURLApp(String url) async {
@@ -19,7 +18,7 @@ launchURLApp(String url) async {
 Future getResponseData(String stock)async{
   DateTime date = DateTime.now().subtract(const Duration(days: 30));
   String fromDate = date.toString().substring(0, 11);
-  final url = Uri.parse('https://newsapi.org/v2/everything?q=$stock&from=$fromDate&domains=investing.com,moneycontrol.com,dsij.in&sources=the-telegraph,google-news,the-times-of-india,the-economic-times,hindustan-times,moneycontrol,livemint,the-indian-express&pageSize=10&language=en&apiKey=71bcfe13e327473db97a115020ae56d2');
+  final url = Uri.parse('https://newsapi.org/v2/everything?q=$stock&from=$fromDate&domains=investing.com,moneycontrol.com,dsij.in&sources=the-telegraph,google-news,the-times-of-india,the-economic-times,hindustan-times,moneycontrol,livemint,the-indian-express&pageSize=10&language=en&apiKey=ac9bae59739541ada5799b082aee2526');
   final response = await http.get(url);
   final resData = jsonDecode(response.body);
   return resData;
