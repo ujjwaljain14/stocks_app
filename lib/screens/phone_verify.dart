@@ -36,7 +36,6 @@ class _PhoneVerifyScreenState extends State<PhoneVerifyScreen> {
       verificationFailed: (FirebaseAuthException e) {},
       codeSent: (String verificationId, int? resendToken) {
         PhoneVerifyScreen.verify = verificationId;
-
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
     );
@@ -56,13 +55,6 @@ class _PhoneVerifyScreenState extends State<PhoneVerifyScreen> {
         body: Container(
           height: double.infinity.h,
           color: Colors.black,
-          // decoration: const  BoxDecoration(
-          // gradient: LinearGradient(colors: [ Colors.black, Colors.black87,],
-          // // [ Color(0xff000000), Color(0xff130F40),],
-          // begin: Alignment.topCenter,
-          // end: Alignment.bottomCenter,
-          // ),
-          // ),
           child: Column(
 
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -131,12 +123,12 @@ class _PhoneVerifyScreenState extends State<PhoneVerifyScreen> {
                   SizedBox(height: 4.5.h,),
                   signInSignUpButton('Verify', ()async{
                     try {
+                      print(finalCode);
                       PhoneAuthCredential credential =
                       PhoneAuthProvider.credential(
                         verificationId: PhoneVerifyScreen.verify,
                         smsCode: finalCode,
                       );
-
                       await auth.signInWithCredential(credential);
                       Navigator.of(context).pop(true);
                     }catch(e){

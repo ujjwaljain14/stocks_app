@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:stocks_app/screens/phone_verify.dart';
 import 'package:stocks_app/widgets/signin_signup.dart';
@@ -16,7 +17,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _lastNameTextController = TextEditingController();
   final TextEditingController _phoneNumberTextController = TextEditingController();
   final TextEditingController _emailTextController = TextEditingController();
-  final TextEditingController _passwordTextController = TextEditingController();
+  final TextEditingController _experienceTextController = TextEditingController();
 
   bool _isVerified = false;
 
@@ -86,13 +87,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       body: Container(
         height: double.infinity,
         color: Colors.black,
-        // decoration: const  BoxDecoration(
-        //   gradient: LinearGradient(colors: [ Colors.black, Colors.black87,],
-        //     // [ Color(0xff000000), Color(0xff130F40),],
-        //     begin: Alignment.topCenter,
-        //     end: Alignment.bottomCenter,
-        //   ),
-        // ),
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
@@ -105,7 +99,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               SizedBox(height:2.25.h),
               SizedBox(width:85.16.w, child: textFieldWidget(context, 'Email Id', Icons.email, false, false, _emailTextController)),
               SizedBox(height:2.25.h),
-              SizedBox(width:85.16.w, child: textFieldWidget(context, 'Password', Icons.lock, true, false, _passwordTextController)),
+              SizedBox(width:85.16.w, child: textFieldWidget(context, 'Market Exp In Yrs', Icons.eject_rounded, false, false, _experienceTextController)),
               SizedBox(height:5.62.h),
               SizedBox(
                 width: 73.w,
@@ -119,16 +113,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     text = "Phone number must be verified";
                   }else if(_emailTextController.text == ''){
                     text = "Email can't be empty";
-                  }else if(_passwordTextController.text.length < 8){
-                    text = "Password must contain 8 characters";
+                  }else if(_experienceTextController.text ==''){
+                    text = "Experience can't be empty";
                   }else{
                     FirebaseFirestore.instance.collection('UserData').
                       doc(_phoneNumberTextController.text).set({
                         "firstName":_firstNameTextController.text,
                         "lastName":_lastNameTextController.text,
                         "email":_emailTextController.text,
-                        "password":_passwordTextController.text,
+                        "Market Experience":_experienceTextController.text,
                     });
+                    // FirebaseAuth.instance.signOut();
                     Navigator.of(context).pop();
                   }
                   if(text.isNotEmpty){

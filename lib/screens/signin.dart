@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:stocks_app/screens/home.dart';
@@ -10,7 +11,7 @@ import 'package:stocks_app/screens/signup.dart';
 class SignInScreen extends StatefulWidget {
 
   const SignInScreen({super.key});
-
+  static String verify="";
   @override
     _SignInScreenState createState() => _SignInScreenState();
 
@@ -31,20 +32,30 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
+  otpSendingMethod(){
+    auth.verifyPhoneNumber(
+      phoneNumber: '+91 ${_phoneNumTextController.text}',
+      verificationCompleted: (PhoneAuthCredential credential) async{
+        await auth.signInWithCredential(credential);
+        Navigator.of(context).pop(true);
+      },
+      verificationFailed: (FirebaseAuthException e) {},
+      codeSent: (String verificationId, int? resendToken) {
+        SignInScreen.verify = verificationId;
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    );
+  }
+
+  FirebaseAuth auth = FirebaseAuth.instance;
+  var finalCode="";
+  var isVerified = false;
   @override
   Widget build(BuildContext context) {
           return Scaffold(
             body: Container(
               height: double.infinity.h,
               color: Colors.black,
-              //   decoration: const  BoxDecoration(
-              //     gradient: LinearGradient(colors:
-              //     [ Colors.black, Colors.black87,],
-              //     // [ Color(0xff000000), Color(0xff130F40),],
-              //       begin: Alignment.topCenter,
-              //       end: Alignment.bottomCenter,
-              //     ),
-              // ),
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
@@ -55,20 +66,67 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                     SizedBox(height: 10.1.h,),
                     SizedBox(width: 85.16.w,
-                        child: textFieldWidget(
-                            context, "Phone Number", Icons.verified_user, false,
-                            true, _phoneNumTextController)),
+                      child: TextField(
+                        controller: _phoneNumTextController,
+                        maxLength: 10,
+                        obscureText: false,
+                        enableSuggestions: false,
+                        autocorrect: false,
+                        cursorColor: Colors.white,
+                        style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 15.sp),
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon( Icons.verified_user, color: Colors.white,),
+                          prefixText: '+91 ',
+                          suffix: TextButton(
+                              onPressed: ()async{
+                                try{
+                                  var db = await FirebaseFirestore.instance
+                                      .collection(
+                                      'UserData').
+                                  doc(_phoneNumTextController.text).get();
+                                  if(db.exists){
+                                    otpSendingMethod();
+                                    setState(() {
+                                      isVerified = true;
+                                    });
+                                  }else{
+                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please SignUp Before Logging'),));
+                                  }
+                                }catch(e){
+                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString()),));
+                                }
+                              },
+                              style: TextButton.styleFrom(
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              minimumSize: Size.square(0.2.h),) ,
+                            child: const Text('Send Otp', style: TextStyle(color:Colors.white),),),
+                            prefixStyle: TextStyle(
+                                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15.sp),
+                            labelText: 'Phone Number',
+                            labelStyle: TextStyle(
+                                color: Colors.white60.withOpacity(0.9), fontSize: 13.5.sp),
+                            filled: true,
+                            fillColor: Colors.white.withOpacity(0.1),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(3.38.h),
+                                borderSide: const BorderSide(width: 0, style: BorderStyle.none))
+                        ),
+                        keyboardType: TextInputType.number,
+                      ),
+                    ),
+                        // child: textFieldWidget(
+                        //     context, "Phone Number", Icons.verified_user, false,
+                        //     true, _phoneNumTextController)),
                     SizedBox(height: 2.25.h,),
                     SizedBox(width: 85.16.w,
                         child: textFieldWidget(
-                            context, "Password", Icons.lock, true, false,
+                            context, "OTP", Icons.lock, true, false,
                             _passwordTextController)),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         TextButton(onPressed: () {},
                             child: const Text(
-                              'Forgot Password?', style: TextStyle(
+                              'Issue in logging in?', style: TextStyle(
                                 color: Colors.white60),)),
                         TextButton(onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
@@ -86,6 +144,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     SizedBox(
                         width: 73.w,
                         child: signInSignUpButton('LOG IN', () async {
+                          finalCode = _passwordTextController.text;
                           (_passwordTextController.text == "" ||
                               _phoneNumTextController.text == "")
                               ?
@@ -96,11 +155,8 @@ class _SignInScreenState extends State<SignInScreen> {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (ctx) => BlinkLoading()));
                           try {
-                            var db = await FirebaseFirestore.instance
-                                .collection(
-                                'UserData').
-                            doc(_phoneNumTextController.text).get().timeout(const Duration(seconds: 5));
-                            if (!db.exists == true) {
+                            // doc(_phoneNumTextController.text).get().timeout(const Duration(seconds: 5));
+                            if (!isVerified) {
                               Navigator.of(context).pushAndRemoveUntil(
                                   MaterialPageRoute(
                                       builder: (context) => const SignInScreen()
@@ -110,37 +166,39 @@ class _SignInScreenState extends State<SignInScreen> {
                               _phoneNumTextController.clear();
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                      content: Text('Invalid Phone Number')));
+                                      content: Text('Please Generate Otp First')));
                             }
-                            else
-                            if (db['password'] == _passwordTextController.text) {
-                              Navigator.of(context).pushAndRemoveUntil(
-                                  MaterialPageRoute(
-                                      builder: (context) => const HomeScreen()
-                                  ),
-                                      (Route<dynamic> route) => false);
-                              _passwordTextController.clear();
-                              _phoneNumTextController.clear();
-                            } else {
-                              Navigator.of(context).pushAndRemoveUntil(
-                                  MaterialPageRoute(
-                                      builder: (context) => const SignInScreen()
-                                  ),
-                                      (Route<dynamic> route) => false);
-                              _passwordTextController.clear();
-                              _phoneNumTextController.clear();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text('Incorrect Password')));
+                            else {
+                              try {
+                                PhoneAuthCredential credential =
+                                PhoneAuthProvider.credential(
+                                  verificationId: SignInScreen.verify,
+                                  smsCode: finalCode,
+                                );
+                                await auth.signInWithCredential(credential);
+                                Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                builder: (context) => const HomeScreen()
+                                ),
+                                (Route<dynamic> route) => false);
+                                _passwordTextController.clear();
+                                _phoneNumTextController.clear();
+                              }catch(e){
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString()),));
+                                Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                builder: (context) => const SignInScreen()
+                                ),
+                                (Route<dynamic> route) => false);
+                                _passwordTextController.clear();
+                                _phoneNumTextController.clear();
+                              }
                             }
                           }catch(e){
-                            print('-----------------------------------------------------');
-                            print(e);
                             ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                     content: Text('Check your internet connection and try again')));
                           }
-
                         })
                     ),
 

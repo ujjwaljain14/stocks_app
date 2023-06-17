@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:stocks_app/screens/signin.dart';
 import 'package:stocks_app/widgets/search_data.dart';
@@ -124,6 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Icons.circle_sharp,color: Colors.grey.shade900.withOpacity(0.8),size: 3.93.h,),
                                       IconButton(
                                         onPressed: (){
+                                          FirebaseAuth.instance.signOut();
                                           Navigator.of(context).pushAndRemoveUntil(
                                               MaterialPageRoute(
                                                   builder: (context) => const SignInScreen()

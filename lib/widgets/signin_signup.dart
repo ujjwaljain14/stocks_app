@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:stocks_app/screens/phone_verify.dart';
 import 'package:sizer/sizer.dart';
 
-TextField textFieldWidget(context, String text, IconData icon, bool isPasswordType, bool isPhoneNum, TextEditingController controller,{bool isVerified=false, bool isSignUp = false}) {
+TextField textFieldWidget(context, String text, IconData icon, bool isOtpType, bool isPhoneNum, TextEditingController controller,{bool isVerified=false, bool isSignUp = false}) {
   return TextField(controller: controller,
-    maxLength: isPhoneNum ? 10 : TextField.noMaxLength,
-    obscureText: isPasswordType,
-    enableSuggestions: !isPasswordType,
-    autocorrect: !isPasswordType,
+    maxLength: isPhoneNum ? 10 : isOtpType ? 6 : TextField.noMaxLength,
+    obscureText: isOtpType,
+    enableSuggestions: !isOtpType,
+    autocorrect: !isOtpType,
     cursorColor: Colors.white,
     style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 15.sp),
     decoration: InputDecoration(
@@ -23,7 +23,7 @@ TextField textFieldWidget(context, String text, IconData icon, bool isPasswordTy
                 ),
               );
               if(isVerified){
-                textFieldWidget(context, text, icon, isPasswordType, isPhoneNum, controller,isVerified: true);
+                textFieldWidget(context, text, icon, isOtpType, isPhoneNum, controller,isVerified: true);
               }
             },
               style: TextButton.styleFrom(
@@ -43,7 +43,7 @@ TextField textFieldWidget(context, String text, IconData icon, bool isPasswordTy
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(3.38.h),
             borderSide: const BorderSide(width: 0, style: BorderStyle.none))
     ),
-    keyboardType: !isPhoneNum ? TextInputType.text : TextInputType.number,
+    keyboardType: (!isPhoneNum || !isOtpType)  ? TextInputType.text : TextInputType.number,
   );
 }
 
