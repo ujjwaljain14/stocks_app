@@ -28,7 +28,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    print('here');
     getStockListData(currentWatchList);
     loadingCsv();
     print('here 2');
@@ -43,11 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
       var db = await FirebaseFirestore.instance.collection('UserData').doc(phoneNumber).get();
       if(db.exists){
           watchListData = db.data()!['WatchLists'];
-          Map<String, dynamic> dropDownListData = Map.from(watchListData);
-          // dropDownListData.addAll({'Manage WatchLists':[], 'Add WatchList':[]});
-          // dropDownListData = watchListData;
-          dropDownListData['Manage WatchLists'] = [];
-          dropDownListData['Add WatchList'] = [];
+          dropDownListData = Map.from(watchListData);
+          dropDownListData.addAll({'Manage WatchLists':[], 'Add WatchList':[]});
           stocks = watchListData[watchList];
           stocks.forEach((element) {
             newsStocks.add(element.substring(0, element.length-3));
@@ -57,6 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
           print(watchListData);
           fetchStockData();
       }
+      // setState(() {});
     }catch(e){
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString()),));
     }
@@ -68,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
   var phoneNumber="";
   var firebaseUser;
   var watchListData;
-  var dropDownListData;
+  Map<String, dynamic>  dropDownListData = {};
   var currentWatchList="My WatchList";
   var _showSheet = true;
   var _showSearchItems = false;
