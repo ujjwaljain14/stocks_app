@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:stocks_app/screens/signin.dart';
 import 'package:stocks_app/widgets/search_data.dart';
 import '../widgets/news_list_item.dart';
-// import 'package:sizer/sizer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import '../widgets/stock_item.dart';
@@ -253,8 +252,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       dropDownListData['Manage WatchLists'] = [];
                                                       dropDownListData['Add WatchList'] = [];
                                                     });
-                                                    print('-----------------add watchlist--------------------------');
-                                                    print(watchListData);
                                                   }
                                                   Navigator.of(context).pop();
                                                 }, child: const Text('Done'))
@@ -265,8 +262,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     }
                                     if(value == 'Manage WatchLists'){
                                       var temp = watchListData.keys.toList();
-                                      print('-----------------manage watchlist--------------------------');
-                                      print(temp);
                                       showDialog(
                                           context: context,
                                           builder: (context)=>AlertDialog(
@@ -279,7 +274,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               ],
                                             ),
                                             content: SizedBox(
-                                              height: 500.h,
+                                              height: 400.h,
                                               width: 300.w,
                                               child: StatefulBuilder(
                                                 builder: (context, sState)
