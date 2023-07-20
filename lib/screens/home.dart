@@ -29,7 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     getStockListData(currentWatchList);
     loadingCsv();
-    print('here 2');
     super.initState();
   }
 
@@ -47,9 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
           stocks.forEach((element) {
             newsStocks.add(element.substring(0, element.length-3));
           });
-          print(dropDownListData);
-          print('-----------------get stock list data--------------------------');
-          print(watchListData);
           fetchStockData();
       }
       // setState(() {});
@@ -146,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ],
                                   ),
                                   Stack(
-                                    alignment: Alignment.center,
+                                      alignment: Alignment.center,
                                       children: [
                                         Icon(
                                           Icons.circle_sharp,color: Colors.grey.shade900.withOpacity(0.8),size: 39.h,),
@@ -159,48 +155,67 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ),
                                                     (Route<dynamic> route) => false);
                                           },
-                                          icon: const Icon(Icons.more_horiz), color: Colors.blueAccent,iconSize: 33.h,),
+                                          icon: const Icon(Icons.logout), color: Colors.blueAccent,iconSize: 30.h,),
+                                          // icon: const Icon(Icons.more_horiz), color: Colors.blueAccent,iconSize: 33.h,),
                                       ]
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
                           Padding(
                             padding: EdgeInsets.symmetric(vertical: 11.h, horizontal: 11.h),
-                            child: TextField(
-                              onTap: ()=>setState(() {
-                                _showSheet = false;
-                                _showSearchItems = true;
-                              }),
-                              onChanged: (value){
-                                x = search(_searchTextController.text, stocks);
-                                // x = await search(_searchTextController.text).whenComplete(() => search);
-                                setState(() {
-                                  stocksList = x;
-                                });
-                              },
-                              onSubmitted: (event)=>setState(() {
-                                fetchStockData();
-                                _searchTextController.clear();
-                                _showSheet = true;
-                                _showSearchItems = false;
-                              }),
-                              style: const TextStyle(color: Colors.white),
-                              maxLines: 1,
-                              controller: _searchTextController,
-                              cursorColor: Colors.white,
-                              keyboardType: TextInputType.name,
-                              decoration: InputDecoration(
-                                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                                  contentPadding: const EdgeInsets.symmetric(vertical: 0),
-                                  prefixIcon: Icon(Icons.search, color: Colors.grey, size: 33.h),
-                                  labelText:  'Search',
-                                  labelStyle: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.grey),
-                                  filled: true,
-                                  fillColor: Colors.blueGrey.shade400.withOpacity(0.2),
-                                  border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(16.h)))
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    onTap: ()=>setState(() {
+                                      _showSheet = false;
+                                      _showSearchItems = true;
+                                    }),
+                                    onChanged: (value){
+                                      x = search(_searchTextController.text, stocks);
+                                      // x = await search(_searchTextController.text).whenComplete(() => search);
+                                      setState(() {
+                                        stocksList = x;
+                                      });
+                                    },
+                                    // onSubmitted: (event)=>setState(() {
+                                    //   fetchStockData();
+                                    //   _searchTextController.clear();
+                                    //   _showSheet = true;
+                                    //   _showSearchItems = false;
+                                    // }),
+                                    style: const TextStyle(color: Colors.white),
+                                    maxLines: 1,
+                                    controller: _searchTextController,
+                                    cursorColor: Colors.white,
+                                    keyboardType: TextInputType.name,
+                                    decoration: InputDecoration(
+                                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                                        contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                                        prefixIcon: Icon(Icons.search, color: Colors.grey, size: 33.h),
+                                        labelText:  'Search',
+                                        labelStyle: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.grey),
+                                        filled: true,
+                                        fillColor: Colors.blueGrey.shade400.withOpacity(0.2),
+                                        border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(16.h)))
 
-                              ),
+                                    ),
+                                  ),
+                                ),
+                                Visibility(
+                                  visible: _showSearchItems,
+                                  child: TextButton(onPressed: ()=>setState(() {
+                                    fetchStockData();
+                                    _searchTextController.clear();
+                                    _showSheet = true;
+                                    _showSearchItems = false;
+                                    // CLoses the keyboard
+                                    FocusManager.instance.primaryFocus?.unfocus();
+                                  }), child: Text('Done', style: TextStyle(color: Colors.blueAccent,fontSize: 18.sp)),),
+                                )
+                              ],
                             ),
                           ),
                           Visibility(visible: !_showSearchItems,
@@ -341,7 +356,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Visibility(
                             visible: !_showSearchItems,
                             child: SizedBox(
-                              height: 480.h,
+                              height: 510.h,
                               child:
                               stocks.isEmpty
                                   ?
@@ -372,12 +387,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                             child: InkWell(
                                               onTap: (){
                                                 fetchTappedStockData(stocks[index]).whenComplete(() => stockItem(context, stocks[index], stockProcessData[stocks[index]]['name'], tappedStockData));
-                                                // stockItem(context, stocks[index], stockProcesData[stocks[index]]);
                                               },
                                               child: Container(
                                                 padding: EdgeInsets.symmetric(horizontal: 11.h,vertical: 5.h),
                                                 width: double.infinity,
-                                                height: 125.h,
+                                                height: 110.h,
                                                 child: Column(
                                                   mainAxisAlignment: MainAxisAlignment.start,
                                                   children: [
